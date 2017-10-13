@@ -3,6 +3,7 @@
     <entity name="Genres" representedClassName="Genres" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="topMovies" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TopMovies" inverseName="genres" inverseEntity="TopMovies" syncable="YES"/>
     </entity>
     <entity name="TopMovies" representedClassName="TopMovies" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -11,10 +12,10 @@
         <attribute name="posterPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="voteAverage" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="genres" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Genres" syncable="YES"/>
+        <relationship name="genres" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Genres" inverseName="topMovies" inverseEntity="Genres" syncable="YES"/>
     </entity>
     <elements>
-        <element name="TopMovies" positionX="-63" positionY="-18" width="128" height="148"/>
-        <element name="Genres" positionX="90" positionY="-171" width="128" height="73"/>
+        <element name="Genres" positionX="90" positionY="-171" width="128" height="88"/>
+        <element name="TopMovies" positionX="-63" positionY="-18" width="128" height="150"/>
     </elements>
 </model>

@@ -2,7 +2,7 @@
 //  TopMovies+CoreDataProperties.swift
 //  MovieReview
 //
-//  Created by Suman Chatterjee on 12/10/2017.
+//  Created by Suman Chatterjee on 13/10/2017.
 //  Copyright © 2017 Suman Chatterjee. All rights reserved.
 //
 //
@@ -18,11 +18,11 @@ extension TopMovies {
     }
 
     @NSManaged public var id: Int32
-    @NSManaged public var title: String?
     @NSManaged public var overview: String?
-    @NSManaged public var voteAverage: Double
-    @NSManaged public var posterPath: String?
     @NSManaged public var popularity: Double
+    @NSManaged public var posterPath: String?
+    @NSManaged public var title: String?
+    @NSManaged public var voteAverage: Double
     @NSManaged public var genres: NSSet?
 
 }
