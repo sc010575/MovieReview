@@ -20,7 +20,7 @@ extension TopMovies {
     @NSManaged public var id: Int32
     @NSManaged public var overview: String?
     @NSManaged public var popularity: Double
-    @NSManaged public var posterPath: String?
+    @NSManaged public var posterPath: URL?
     @NSManaged public var title: String?
     @NSManaged public var voteAverage: Double
     @NSManaged public var genres: NSSet?
@@ -43,3 +43,44 @@ extension TopMovies {
     @NSManaged public func removeFromGenres(_ values: NSSet)
 
 }
+
+extension TopMovies {
+    
+    private enum Keys: String, SerializationKey {
+        case id
+        case title
+        case overview
+        case posterPath = "poster_path"
+        case voteAverage = "vote_average"
+        case popularity = "popularity"
+        case genresId = "genre_ids"
+    }
+    
+    class func newTopMovies(serialization:Serialization, with managedContext:NSManagedObjectContext?) -> TopMovies {
+        
+        let topMovieEntity = NSEntityDescription.entity(forEntityName: String(describing: TopMovies.self), in:managedContext!)
+        let topMovies = TopMovies(entity: topMovieEntity!, insertInto: managedContext)
+
+        topMovies.id = Int32(serialization.value(forKey: Keys.id) ?? 0)
+        topMovies.title = serialization.value(forKey: Keys.title)
+        topMovies.overview = serialization.value(forKey: Keys.overview)
+        if let url: String = serialization.value(forKey: Keys.posterPath) {
+            topMovies.posterPath = URL(string: ImageURL+url)
+        } else {
+            topMovies.posterPath = nil
+        }
+        if let average:Double = serialization.value(forKey:Keys.voteAverage) {
+            topMovies.voteAverage = average
+        }else{
+            topMovies.voteAverage = 0
+        }
+        if let popular:Double = serialization.value(forKey:Keys.popularity) {
+            topMovies.popularity = popular
+        }else{
+            topMovies.popularity = 0
+        }
+        let genresIds:Array = serialization.value(forKey:Keys.genresId) ?? []
+        return topMovies
+    }
+}
+

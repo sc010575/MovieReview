@@ -11,6 +11,7 @@ import Foundation
 public let ImageURL = "https://image.tmdb.org/t/p/w500"
 
 struct Movie {
+    let id: Int?
     let title: String?
     let overview: String?
     let posterPath: URL?
@@ -21,6 +22,7 @@ struct Movie {
 extension Movie {
     
     private enum Keys: String, SerializationKey {
+        case id
         case title
         case overview
         case posterPath = "poster_path"
@@ -29,6 +31,7 @@ extension Movie {
     }
     
     init(serialization: Serialization) {
+        id = serialization.value(forKey: Keys.id)
         title = serialization.value(forKey: Keys.title)
         overview = serialization.value(forKey: Keys.overview)
         if let url: String = serialization.value(forKey: Keys.posterPath) {

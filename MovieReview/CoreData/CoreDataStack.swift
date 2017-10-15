@@ -23,9 +23,17 @@ class CoreDataStack {
         return self.storeContainer.viewContext
     }()
     
-    lazy var privateManageObjectContext:NSManagedObjectContext = {
+    lazy public fileprivate(set) var mainQueueManagedObjectContext : NSManagedObjectContext = {
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.parent = self.privateQueueManagedObjectContext
+        return context
+    }()
+    
+    lazy public fileprivate(set) var privateQueueManagedObjectContext : NSManagedObjectContext =  {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        context.persistentStoreCoordinator = self.storeContainer.persistentStoreCoordinator
+        return context
         
-        NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     }()
     
     private lazy var storeContainer: NSPersistentContainer = {
@@ -42,7 +50,7 @@ class CoreDataStack {
     func saveContextInBackground(){
         guard managedContext.hasChanges else { return }
         let moc = managedContext
-        let privateMOC = privateManageObjectContext
+        let privateMOC = privateQueueManagedObjectContext
         privateMOC.parent = moc
         privateMOC.perform {
             do {

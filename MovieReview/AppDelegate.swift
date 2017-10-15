@@ -15,7 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var  coreDataStack = CoreDataStack(modelName: "MovieReview")
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        guard let navController = window?.rootViewController as? UINavigationController,
+            let viewController = navController.topViewController as? MainViewController else {
+                return true
+        }
+        viewController.coreDataStack = coreDataStack
         return true
     }
 

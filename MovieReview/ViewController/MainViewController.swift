@@ -12,12 +12,14 @@ class MainViewController: UITableViewController {
 
     fileprivate var request1: AnyObject?
     fileprivate var request2: AnyObject?
+    var coreDataStack: CoreDataStack!
+
     var appSync = AppSyncManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //let appSync = AppSyncManager()
-        appSync.doDispatch {
+        appSync.doDispatch(with: coreDataStack) {
             print("done")
         }
     }

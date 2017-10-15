@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import CoreData
+import UIKit
+
 //https://api.themoviedb.org/3/genre/movie/list?api_key=449d682523802e0ca4f8b06d8dcf629c&language=en
 //https://api.themoviedb.org/3/movie/19404?api_key=449d682523802e0ca4f8b06d8dcf629c&language=en-US
 //http://api.themoviedb.org/3/movie/top_rated?api_key=449d682523802e0ca4f8b06d8dcf629c&language=en&page=2
@@ -37,6 +40,7 @@ extension ApiWrapper {
 
 protocol ApiResource {
     associatedtype Model
+    var manageObjectContext:NSManagedObjectContext { get }
     var methodPath: String { get }
     var apiType:ApiKeys { get }
     func makeModel(serialization: Serialization) -> Model
@@ -64,19 +68,22 @@ extension ApiResource {
 }
 
 struct MoviesResource: ApiResource {
-    typealias Model = Movie
+    typealias Model = TopMovies
     let methodPath = "/movie/top_rated"
+    var manageObjectContext: NSManagedObjectContext
     let apiType: ApiKeys = .results
-    func makeModel(serialization: Serialization) -> Movie {
-        return Movie(serialization: serialization)
+    func makeModel(serialization: Serialization) -> TopMovies {
+        return TopMovies.newTopMovies(serialization: serialization, with: manageObjectContext)
     }
 }
 
 struct GenreResource: ApiResource {
-    typealias Model = Genre
+    var manageObjectContext: NSManagedObjectContext
+    typealias Model = Genres
     let methodPath = "/genre/movie/list"
     let apiType: ApiKeys = .genres
-    func makeModel(serialization: Serialization) -> Genre {
-        return Genre(serialization: serialization)
+    func makeModel(serialization: Serialization) -> Genres {
+        return Genres.newGenres(serialization: serialization, with: manageObjectContext )
+        
     }
 }
