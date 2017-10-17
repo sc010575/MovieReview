@@ -36,7 +36,7 @@ class CoreDataStack {
         
     }()
     
-    private lazy var storeContainer: NSPersistentContainer = {
+   lazy var storeContainer: NSPersistentContainer = {
         
         let container = NSPersistentContainer(name: self.modelName)
         container.loadPersistentStores { (storeDescription, error) in
