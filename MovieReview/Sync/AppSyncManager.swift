@@ -45,7 +45,6 @@ class AppSyncManager: NSObject {
             }
         }
         group.notify(queue: DispatchQueue.main) {
-            print("done doing stuff again")
             completionHandler()
         }
 

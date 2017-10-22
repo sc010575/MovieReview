@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         guard let navController = window?.rootViewController as? UINavigationController,
-            let viewController = navController.topViewController as? MainViewController else {
+            let viewController = navController.topViewController as? LaunchViewController else {
                 return true
         }
         viewController.coreDataStack = coreDataStack

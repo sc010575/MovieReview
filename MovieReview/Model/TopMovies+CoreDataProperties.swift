@@ -10,6 +10,7 @@
 import Foundation
 import CoreData
 
+public let ImageURL = "https://image.tmdb.org/t/p/w500"
 
 extension TopMovies {
 
@@ -79,7 +80,23 @@ extension TopMovies {
         }else{
             topMovies.popularity = 0
         }
-        let genresIds:Array = serialization.value(forKey:Keys.genresId) ?? []
+        let genresIds:[Int16] = serialization.value(forKey:Keys.genresId) ?? []
+        
+        // Populate genres Lists
+        var genresLists:[Genres] = []
+        let fetchRequest = NSFetchRequest<Genres>(entityName: "Genres")
+        do {
+            let fetchedGenre = try managedContext?.fetch(fetchRequest)
+            genresIds.forEach({ (id) in
+                guard let genres = fetchedGenre?.filter( { $0.id == id}),let genre:Genres = genres.first else {
+                    return
+                }
+                genresLists.append(genre)
+            })
+        } catch {
+            fatalError("Failed to fetch employees: \(error)")
+        }
+        topMovies.genres =  NSSet(array: genresLists)
         return topMovies
     }
 }
