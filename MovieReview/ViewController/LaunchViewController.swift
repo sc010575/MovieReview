@@ -18,7 +18,7 @@ class LaunchViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.setToolbarHidden(true, animated: false)
         self.activityIndicator.startAnimating()
-        appSync.doDispatch(with: coreDataStack) { [unowned self] in
+        appSync.doDispatch(with: coreDataStack) {[unowned self]  (_ state:SyncState) in
             self.activityIndicator.stopAnimating()
             self.readyToShow()
         }
@@ -29,8 +29,11 @@ class LaunchViewController: UIViewController {
         guard let mainViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainViewController") as?  MainViewController else {
             return
         }
-        mainViewController.coreDataStack = self.coreDataStack
+        mainViewController.viewModel = MainViewModel(with:self.coreDataStack)
         let navBarOnModal: UINavigationController = UINavigationController(rootViewController: mainViewController)
-        self.present(navBarOnModal, animated: true, completion: nil)
+        
+        DispatchQueue.main.async {
+            self.present(navBarOnModal, animated: true, completion: nil)
+            }
     }
 }

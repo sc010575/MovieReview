@@ -17,7 +17,7 @@ protocol NetworkRequest: class {
 
 extension NetworkRequest {
     fileprivate func load(_ url: URL, withCompletion completion: @escaping (Model?) -> Void) {
-        let configuration = URLSessionConfiguration.ephemeral
+        let configuration = URLSessionConfiguration.default   //Use .ephemeral - to not cache the data
         let session = URLSession(configuration: configuration, delegate: nil, delegateQueue: OperationQueue.main)
         let task = session.dataTask(with: url, completionHandler: { [weak self] (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let data = data else {

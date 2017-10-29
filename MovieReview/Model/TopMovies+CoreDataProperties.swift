@@ -84,7 +84,8 @@ extension TopMovies {
         
         // Populate genres Lists
         var genresLists:[Genres] = []
-        let fetchRequest = NSFetchRequest<Genres>(entityName: "Genres")
+
+        let fetchRequest:NSFetchRequest<Genres> = Genres.fetchRequest()
         do {
             let fetchedGenre = try managedContext?.fetch(fetchRequest)
             genresIds.forEach({ (id) in
