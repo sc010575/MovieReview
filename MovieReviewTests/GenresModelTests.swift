@@ -23,7 +23,7 @@ class GenresModelTests: XCTestCase,JsonLoading {
     }
     
     func testgenreRequest() {
-        let  genreRequest:ApiRequest  = ApiRequest(resource:GenreResource(manageObjectContext: coreDataStack.managedContext))
+        let  genreRequest:ApiRequest  = ApiRequest(resource:GenreResource(manageObjectContext: coreDataStack.mainQueueManagedObjectContext))
         XCTAssertNotNil(genreRequest, "genreRequest should not be nil")
         
     }
@@ -31,13 +31,13 @@ class GenresModelTests: XCTestCase,JsonLoading {
     func testNewGenres() {
         
         let jsonData = self.decode(file: "GenresLists", for: "genres")
-        let  genreResources:ApiRequest  = ApiRequest(resource:GenreResource(manageObjectContext: coreDataStack.managedContext))
+        let  genreResources:ApiRequest  = ApiRequest(resource:GenreResource(manageObjectContext: coreDataStack.mainQueueManagedObjectContext))
         let wrapper = ApiWrapper(serialization: jsonData, for:.genres)
         let _ = genreResources.resource.makeModel(serialization: wrapper.items[0])
         coreDataStack.saveContext()
         
         let fetchRequest = NSFetchRequest<Genres>(entityName: "Genres")
-        let count = try! coreDataStack.managedContext.count(for: fetchRequest)
+        let count = try! coreDataStack.mainQueueManagedObjectContext.count(for: fetchRequest)
         XCTAssertTrue(count == 1)
         
     }
@@ -45,7 +45,7 @@ class GenresModelTests: XCTestCase,JsonLoading {
     func testGenresFetchRequests() {
         
         let jsonData = self.decode(file: "GenresLists", for: "genres")
-        let  genreResources:ApiRequest  = ApiRequest(resource:GenreResource(manageObjectContext: coreDataStack.managedContext))
+        let  genreResources:ApiRequest  = ApiRequest(resource:GenreResource(manageObjectContext: coreDataStack.mainQueueManagedObjectContext))
         let wrapper = ApiWrapper(serialization: jsonData, for:.genres)
         wrapper.items.forEach { (item) in
             let _ = genreResources.resource.makeModel(serialization: item)
@@ -56,7 +56,7 @@ class GenresModelTests: XCTestCase,JsonLoading {
         let filter = 10770
         fetchRequest.predicate = NSPredicate(format: "id == %ld", filter)
         do {
-            let fetchedGenre = try coreDataStack.managedContext.fetch(fetchRequest)
+            let fetchedGenre = try coreDataStack.mainQueueManagedObjectContext.fetch(fetchRequest)
             let genries = fetchedGenre.first
             let name = genries?.name ?? ""
             XCTAssertTrue(name == "TV Movie")
